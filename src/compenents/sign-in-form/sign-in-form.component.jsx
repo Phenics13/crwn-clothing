@@ -3,13 +3,14 @@ import { useState } from "react";
 import FormInput from "../form-input/form-input.component";
 import Button from "../button/button.component";
 
-import './sign-in-form.styles.scss';
-
 import {
   signInAuthUserWithEmailAndPassword,
   signInWithGooglePopUp,
   createUserDocumentFromAuth
 } from "../../utils/firebase/firebase.utils";
+
+import './sign-in-form.styles.scss';
+
 
 
 const defaultFormFields = {
@@ -23,8 +24,7 @@ const SignInForm = () => {
 
   const signInWithGoogle = async () => {
     try {
-      const { user } = await signInWithGooglePopUp();
-      await createUserDocumentFromAuth(user);
+      await signInWithGooglePopUp();
     } catch (error) {
       console.log('error sign in with Google user', error.message)
     }
