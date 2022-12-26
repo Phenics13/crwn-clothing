@@ -4,7 +4,7 @@ import FormInput from "../form-input/form-input.component";
 import Button from "../button/button.component";
 
 import {
-  createAuthUserWithEmailAndPassowrd,
+  createAuthUserWithEmailAndPassword,
   createUserDocumentFromAuth
 } from "../../utils/firebase/firebase.utils";
 
@@ -25,17 +25,17 @@ const SignUpForm = () => {
     event.preventDefault();
 
     if (password !== confirmPassword) {
-      alert("passwords do not match");
+      alert("Passwords do not match");
       return;
     }
 
     const resetFormFields = () => {
       setFormFields(defaultFormFields);
-    }
+    };
 
     try {
-      const { user } = await createAuthUserWithEmailAndPassowrd(email, password);
-      const userDocRef = await createUserDocumentFromAuth(user, { displayName })
+      const { user } = await createAuthUserWithEmailAndPassword(email, password);
+      await createUserDocumentFromAuth(user, { displayName })
 
       resetFormFields();
     } catch (error) {
@@ -45,13 +45,12 @@ const SignUpForm = () => {
         console.log('user creation encountered an error', error.message)
       }
     }
-
-  }
+  };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormFields({ ...formFields, [name]: value })
-  }
+  };
 
 
   return (
@@ -95,7 +94,7 @@ const SignUpForm = () => {
           value={confirmPassword}
         />
 
-        <Button type="submit">Sign Up</Button>
+        <Button type='submit'>Sign Up</Button>
       </form>
     </div>
   );
