@@ -7,7 +7,6 @@ import CartItem from '../cart-item/cart-item.component';
 import { CartContext } from '../../contexts/cart.context';
 
 import './cart-dropdown.styles.scss';
-import { Link } from 'react-router-dom';
 
 const CartDropdown = () => {
   const { cartItems } = useContext(CartContext);
