@@ -13,24 +13,17 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
+const middleWares =
+  [process.env.NODE_ENV === 'development' &&
+    logger].filter(Boolean); //change to custom loggerMiddleware
 
-const loggerMiddleware = (store) => (next) => (action) => {
-  if (!action.type) {
-    return next(action);
-  }
+const composeEnhancer =
+  (process.env.NODE_ENV === 'development' &&
+    window &&
+    window.__REDIX_DEVTOOLS_EXTENSION_COMPOSE__) ||
+  compose;
 
-  console.log('type: ', action.type);
-  console.log('payload: ', action.payload);
-  console.log('currentState: ', store.getState());
-
-  next(action);
-
-  console.log('next state: ', store.getState());
-};
-
-const middleWares = [logger]; //change to custom loggerMiddleware
-
-const composedEnhancers = compose(applyMiddleware(...middleWares));
+const composedEnhancers = composeEnhancer(applyMiddleware(...middleWares));
 
 export const store = legacy_createStore(persistedReducer, undefined, composedEnhancers);
 
