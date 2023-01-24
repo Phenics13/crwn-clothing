@@ -30,9 +30,6 @@ const Navigation = () => {
           <NavLink to='/shop'>
             SHOP
           </NavLink>
-          <NavLink to='/contact'>
-            CONTACT
-          </NavLink>
           {currentUser ? (
             <NavLink as='span' onClick={signOutHandler}>
               SIGN OUT
