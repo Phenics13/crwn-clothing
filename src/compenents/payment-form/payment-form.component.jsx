@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { CardElement, useStripe, useElements, AddressElement } from "@stripe/react-stripe-js";
 import { useDispatch, useSelector } from "react-redux";
 
 import { selectCartTotal } from "../../store/cart/cart.selector";
-import { selectCurrentUser } from "../../store/user/user.selector";
 
 import { BUTTON_TYPE_CLASSES } from "../button/button.component";
 import { PaymentFormContainer, FormContainer, PaymentButton } from "./payment-form.styles";
@@ -14,13 +13,24 @@ const PaymentForm = () => {
   const stripe = useStripe();
   const elements = useElements();
   const amount = useSelector(selectCartTotal);
-  const currentUser = useSelector(selectCurrentUser);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
   const paymentHandler = async (e) => {
     e.preventDefault();
 
     if (!stripe || !elements) return;
+
+    if (amount === 0) {
+      alert('Your cart is empty');
+      return;
+    }
+
+    const {
+      complete,
+      value: { address, name }
+    } = await elements.getElement(AddressElement).getValue();
+
+    if (!complete) return;
 
     setIsProcessingPayment(true);
 
@@ -40,7 +50,8 @@ const PaymentForm = () => {
       payment_method: {
         card: elements.getElement(CardElement),
         billing_details: {
-          name: currentUser ? currentUser.displayName : 'Guest',
+          name,
+          address,
         }
       }
     });
@@ -48,10 +59,13 @@ const PaymentForm = () => {
     setIsProcessingPayment(false);
 
     if (paymentResult.error) {
-      alert(paymentResult.error);
+      alert(paymentResult.error.message);
     } else {
       if (paymentResult.paymentIntent.status === 'succeeded') {
         alert('Payment Successful');
+
+        elements.getElement(CardElement).clear();
+        elements.getElement(AddressElement).clear();
         dispatch(setCartItems([]));
       }
     }
@@ -62,6 +76,9 @@ const PaymentForm = () => {
       <FormContainer onSubmit={paymentHandler}>
         <h2>Credit Card Payment: </h2>
         <CardElement />
+        <AddressElement options={{
+          mode: 'shipping',
+        }} />
         <PaymentButton
           isLoading={isProcessingPayment}
           buttonType={BUTTON_TYPE_CLASSES.inverted}>
