@@ -8,7 +8,7 @@ import CartDropdown from "../../compenents/cart-dropdown/cart-dropdown.component
 import { selectIsCartOpen } from "../../store/cart/cart.selector";
 import { selectCurrentUser } from "../../store/user/user.selector";
 
-import { NavigationContainer, NavLinks, NavLink, LogoContainer, Logo } from './navigaton.styles'
+import { NavigationContainer, NavLinks, NavLink, LogoContainer, Logo, Count } from './navigaton.styles'
 import { signOutStart } from "../../store/user/user.action";
 import { selectWishlistCount } from "../../store/wishlist/wishlist.selector";
 
@@ -34,7 +34,7 @@ const Navigation = () => {
           </NavLink>
           <NavLink to='/wishlist'>
             WISHLIST
-            <span>{wishlistCount}</span>
+            <Count>{wishlistCount}</Count>
           </NavLink>
           {currentUser ? (
             <NavLink as='span' onClick={signOutHandler}>

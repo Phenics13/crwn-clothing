@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { addItemToCart } from '../../store/cart/cart.action';
-import { addItemToWishlist } from '../../store/wishlist/wishlist.action';
+import { addItemToWishlist, removeItemFromWishlist } from '../../store/wishlist/wishlist.action';
 import { selectCartItems } from '../../store/cart/cart.selector';
 import { selectWishlist } from '../../store/wishlist/wishlist.selector';
 import Button, { BUTTON_TYPE_CLASSES } from '../button/button.component';
@@ -20,7 +20,16 @@ const ProductCard = ({ product }) => {
   };
 
   const addProductToWishlist = () => {
-    dispatch(addItemToWishlist(wishlist, product));
+    if (isExistInWishlist(product)) {
+      dispatch(removeItemFromWishlist(wishlist, product))
+    } else {
+      dispatch(addItemToWishlist(wishlist, product));
+    }
+  };
+
+  const isExistInWishlist = (product) => {
+    return wishlist.find(wishlistItem =>
+      wishlistItem.id === product.id);
   };
 
   return (
@@ -39,7 +48,7 @@ const ProductCard = ({ product }) => {
         <Button
           buttonType={BUTTON_TYPE_CLASSES.inverted}
           onClick={addProductToWishlist}
-        >&#10084;
+        >{isExistInWishlist(product) ? '❤️' : '🤍'}
         </Button>
       </ButtonContainer>
     </ProductCardContainer>

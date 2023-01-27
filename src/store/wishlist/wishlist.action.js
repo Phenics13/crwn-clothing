@@ -29,7 +29,7 @@ export const setWishlist = (wishlist) =>
   createAction(WISHLIST_ACTION_TYPES.SET_WISHLIST, wishlist);
 
 export const fetchWishlistStart = () =>
-  createAction(WISHLIST_ACTION_TYPES.FETCH_WISHLIST_START); 
+  createAction(WISHLIST_ACTION_TYPES.FETCH_WISHLIST_START);
 
 export const fetchWishlistSuccess = () =>
   createAction(WISHLIST_ACTION_TYPES.FETCH_WISHLIST_SUCCESS);

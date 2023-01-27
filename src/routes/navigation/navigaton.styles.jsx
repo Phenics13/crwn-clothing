@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { ReactComponent as CrwnLogo } from '../../assets/crown-svgrepo-com.svg'
+import { ReactComponent as CrwnLogo } from '../../assets/crwn.svg';
 
 export const NavigationContainer = styled.div`
   width: 100%;
