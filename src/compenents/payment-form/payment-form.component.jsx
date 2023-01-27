@@ -6,7 +6,7 @@ import { selectCartTotal } from "../../store/cart/cart.selector";
 
 import { BUTTON_TYPE_CLASSES } from "../button/button.component";
 import { PaymentFormContainer, FormContainer, PaymentButton } from "./payment-form.styles";
-import { setCartItems } from "../../store/cart/cart.action";
+import { emptyCart } from "../../store/cart/cart.action";
 
 const PaymentForm = () => {
   const dispatch = useDispatch();
@@ -66,7 +66,7 @@ const PaymentForm = () => {
 
         elements.getElement(CardElement).clear();
         elements.getElement(AddressElement).clear();
-        dispatch(setCartItems([]));
+        dispatch(emptyCart());
       }
     }
   };

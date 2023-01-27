@@ -61,6 +61,45 @@ export const getCategoriesAndDocuments = async () => {
   return querySnapshot.docs.map(doc => doc.data());
 }
 
+export const updateWishlistDocumentFromLocalState = async (user, wishlist) => {
+  if (!user) return;
+
+  const wishlistDocRef = doc(db, 'wishlists', user.id);
+  const wishlistSnapshot = await getDoc(wishlistDocRef);
+
+  try {
+    await setDoc(wishlistDocRef, {
+      wishlist
+    })
+  } catch (error) {
+    console.log('error updating the user wishlist', error.message);
+  }
+
+  return await getDoc(wishlistDocRef); // instead of wishlistSnapshot to prevent data clash
+};
+
+export const createWishlistDocumentFromAuth = async (
+  user,
+  wishlist
+) => {
+  if (!user) return;
+
+  const wishlistDocRef = doc(db, 'wishlists', user.id);
+  const wishlistSnapshot = await getDoc(wishlistDocRef);
+
+  if (!wishlistSnapshot.exists()) {
+    try {
+      await setDoc(wishlistDocRef, {
+        wishlist
+      })
+    } catch (error) {
+      console.log('error creating the user wishlist', error.message);
+    }
+  }
+
+  return await getDoc(wishlistDocRef); // instead of wishlistSnapshot to prevent data clash
+};
+
 
 export const createUserDocumentFromAuth = async (
   userAuth,

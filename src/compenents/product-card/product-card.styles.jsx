@@ -1,5 +1,27 @@
 import styled from 'styled-components';
 
+export const ButtonContainer = styled.div`
+  width: 80%;
+  opacity: 0.85;
+  position: absolute;
+  top: 255px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  button {
+    width: 100%;
+    padding: 0 15px;
+  }
+
+  button:nth-child(2) {
+    width: auto;
+    min-width: 50px;
+    padding: 0;
+    border-left: none;
+  }
+`;
+
 export const ProductCardContainer = styled.div`
   width: 100%;
   display: flex;
@@ -13,22 +35,12 @@ export const ProductCardContainer = styled.div`
     object-fit: cover;
   }
 
-  button {
-    width: 80%;
-    opacity: 0.7;
-    position: absolute;
-    top: 255px;
-    display: none;
-    align-items: center;
-  }
-
   &:hover {
     img {
       opacity: 0.8;
     }
 
-    button {
-      opacity: 0.85;
+    ${ButtonContainer} {
       display: flex;
     }
   }

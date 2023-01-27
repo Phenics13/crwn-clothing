@@ -19,7 +19,7 @@ const Checkout = () => {
               <span>{item}</span>
             </HeaderBlock>
           ))}
-      </CheckoutHeader>
+      </CheckoutHeader> 
       {cartItems.length
         ? cartItems.map(item =>
           <CheckoutItem

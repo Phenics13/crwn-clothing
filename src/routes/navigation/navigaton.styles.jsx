@@ -29,6 +29,19 @@ export const NavLinks = styled.div`
 `;
 
 export const NavLink = styled(Link)`
+  position: relative;
   padding: 0 1rem;
   cursor: pointer;
+`;
+
+export const Count = styled.span` 
+  position: absolute;
+  top: -10px;
+  right: -8px;
+  background-color: red;
+  color: white;
+  width: 23px;
+  text-align: center;
+  border-radius: 5rem;
+  font-size: 12px;
 `;

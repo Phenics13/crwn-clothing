@@ -51,3 +51,5 @@ export const removeItemFromCart = (cartItems, cartItemToRemove) =>
 
 export const clearItemFromCart = (cartItems, cartItemToClear) =>
   setCartItems(clearCartItem(cartItems, cartItemToClear));
+
+export const emptyCart = () => setCartItems([]);

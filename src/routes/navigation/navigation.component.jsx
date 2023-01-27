@@ -10,11 +10,13 @@ import { selectCurrentUser } from "../../store/user/user.selector";
 
 import { NavigationContainer, NavLinks, NavLink, LogoContainer, Logo } from './navigaton.styles'
 import { signOutStart } from "../../store/user/user.action";
+import { selectWishlistCount } from "../../store/wishlist/wishlist.selector";
 
 const Navigation = () => {
   const dispatch = useDispatch();
   const currentUser = useSelector(selectCurrentUser);
   const isCartOpen = useSelector(selectIsCartOpen);
+  const wishlistCount = useSelector(selectWishlistCount);
 
   const signOutHandler = () => {
     dispatch(signOutStart());
@@ -29,6 +31,10 @@ const Navigation = () => {
         <NavLinks>
           <NavLink to='/shop'>
             SHOP
+          </NavLink>
+          <NavLink to='/wishlist'>
+            WISHLIST
+            <span>{wishlistCount}</span>
           </NavLink>
           {currentUser ? (
             <NavLink as='span' onClick={signOutHandler}>
