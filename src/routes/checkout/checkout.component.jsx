@@ -2,9 +2,9 @@ import { useSelector } from 'react-redux';
 
 import { selectCartItems, selectCartTotal } from '../../store/cart/cart.selector';
 
-import CheckoutItem from '../../compenents/checkout-item/checkout-item.component';
+import CheckoutItem from '../../components/checkout-item/checkout-item.component';
 import { CheckoutContainer, CheckoutHeader, HeaderBlock, Total } from './checkout.styles';
-import PaymentForm from '../../compenents/payment-form/payment-form.component';
+import PaymentForm from '../../components/payment-form/payment-form.component';
 
 const Checkout = () => {
   const cartItems = useSelector(selectCartItems);
@@ -19,7 +19,7 @@ const Checkout = () => {
               <span>{item}</span>
             </HeaderBlock>
           ))}
-      </CheckoutHeader> 
+      </CheckoutHeader>
       {cartItems.length
         ? cartItems.map(item =>
           <CheckoutItem

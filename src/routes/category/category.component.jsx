@@ -2,8 +2,8 @@ import { Fragment, useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import ProductCard from '../../compenents/product-card/product-card.component';
-import Spinner from '../../compenents/spinner/spinner.component';
+import ProductCard from '../../components/product-card/product-card.component';
+import Spinner from '../../components/spinner/spinner.component';
 
 import { selectCategoriesIsLoading, selectCategoriesMap } from '../../store/categories/category.selector';
 

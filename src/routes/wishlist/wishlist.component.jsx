@@ -1,8 +1,8 @@
 import { Fragment, useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import Spinner from "../../compenents/spinner/spinner.component";
-import WishlistItem from "../../compenents/wishlist-item/wishlist-item.component";
+import Spinner from "../../components/spinner/spinner.component";
+import WishlistItem from "../../components/wishlist-item/wishlist-item.component";
 import { selectCurrentUser } from "../../store/user/user.selector";
 import { fetchWishlistStart } from "../../store/wishlist/wishlist.action";
 import { selectWishlistIsLoading, selectWishlistSorted } from "../../store/wishlist/wishlist.selector";
