@@ -1,4 +1,4 @@
-import { initializeApp } from 'firebase/app';
+import { initializeApp } from "firebase/app";
 import {
   getFirestore,
   doc,
@@ -8,7 +8,8 @@ import {
   writeBatch,
   query,
   getDocs,
-} from 'firebase/firestore';
+  QueryDocumentSnapshot,
+} from "firebase/firestore";
 import {
   getAuth,
   signInWithPopup,
@@ -17,7 +18,13 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
-} from 'firebase/auth';
+  User,
+  NextOrObserver,
+} from "firebase/auth";
+
+import { Category } from "../../store/categories/category.types";
+import { CurrentUser } from "../../store/user/user.types";
+import { WishlistItem } from "../../store/wishlist/wishlist.types";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAOFL7Jm3kz571UfFhQ6HcPDsQHxdInomY",
@@ -25,13 +32,13 @@ const firebaseConfig = {
   projectId: "crwn-clothing-db-3dff0",
   storageBucket: "crwn-clothing-db-3dff0.appspot.com",
   messagingSenderId: "575024768730",
-  appId: "1:575024768730:web:030573674c491f5bcc27e3"
+  appId: "1:575024768730:web:030573674c491f5bcc27e3",
 };
 
 const app = initializeApp(firebaseConfig);
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({
-  prompt: 'select_account',
+  prompt: "select_account",
 });
 
 export const auth = getAuth(app);
@@ -40,74 +47,95 @@ export const signInWithGooglePopUp = () => signInWithPopup(auth, provider);
 
 export const db = getFirestore(app);
 
-export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+export type ObjectsToAdd = {
+  title: string;
+};
+
+export const addCollectionAndDocuments = async <T extends ObjectsToAdd>(
+  collectionKey: string,
+  objectsToAdd: T[]
+): Promise<void> => {
   const collectionRef = collection(db, collectionKey);
   const batch = writeBatch(db);
 
-  objectsToAdd.forEach(object => {
+  objectsToAdd.forEach((object) => {
     const docRef = doc(collectionRef, object.title.toLowerCase());
     batch.set(docRef, object);
   });
 
   await batch.commit();
-  console.log('done');
+  console.log("done");
 };
 
-export const getCategoriesAndDocuments = async () => {
-  const collectionRef = collection(db, 'categories');
+export const getCategoriesAndDocuments = async (): Promise<Category[]> => {
+  const collectionRef = collection(db, "categories");
   const q = query(collectionRef);
 
   const querySnapshot = await getDocs(q);
-  return querySnapshot.docs.map(doc => doc.data());
-}
+  return querySnapshot.docs.map(
+    (docSnapshot) => docSnapshot.data() as Category
+  );
+};
 
-export const updateWishlistDocumentFromLocalState = async (user, wishlist) => {
+export const updateWishlistDocumentFromLocalState = async (
+  user: CurrentUser,
+  wishlist: WishlistItem[]
+) => {
   if (!user) return;
 
-  const wishlistDocRef = doc(db, 'wishlists', user.id);
-  const wishlistSnapshot = await getDoc(wishlistDocRef);
+  const wishlistDocRef = doc(db, "wishlists", user.id);
+  await getDoc(wishlistDocRef);
 
   try {
     await setDoc(wishlistDocRef, {
-      wishlist
-    })
+      wishlist,
+    });
   } catch (error) {
-    console.log('error updating the user wishlist', error.message);
+    console.log("error updating the user wishlist", error);
   }
 
   return await getDoc(wishlistDocRef); // instead of wishlistSnapshot to prevent data clash
 };
 
 export const createWishlistDocumentFromAuth = async (
-  user,
-  wishlist
+  user: CurrentUser,
+  wishlist: WishlistItem[]
 ) => {
   if (!user) return;
 
-  const wishlistDocRef = doc(db, 'wishlists', user.id);
+  const wishlistDocRef = doc(db, "wishlists", user.id);
   const wishlistSnapshot = await getDoc(wishlistDocRef);
 
   if (!wishlistSnapshot.exists()) {
     try {
       await setDoc(wishlistDocRef, {
-        wishlist
-      })
+        wishlist,
+      });
     } catch (error) {
-      console.log('error creating the user wishlist', error.message);
+      console.log("error creating the user wishlist", error);
     }
   }
 
   return await getDoc(wishlistDocRef); // instead of wishlistSnapshot to prevent data clash
 };
 
+export type AdditionalInformation = {
+  displayName?: string;
+};
+
+export type UserData = {
+  displayName: string;
+  email: string;
+  createdAt: Date;
+};
 
 export const createUserDocumentFromAuth = async (
-  userAuth,
-  additionalInformation = {}
-) => {
+  userAuth: User,
+  additionalInformation = {} as AdditionalInformation
+): Promise<void | QueryDocumentSnapshot> => {
   if (!userAuth) return;
 
-  const userDocRef = doc(db, 'users', userAuth.uid);
+  const userDocRef = doc(db, "users", userAuth.uid);
   const userSnapshot = await getDoc(userDocRef);
 
   if (!userSnapshot.exists()) {
@@ -120,38 +148,45 @@ export const createUserDocumentFromAuth = async (
         email,
         createdAt,
         ...additionalInformation,
-      })
+      });
     } catch (error) {
-      console.log('error creating the user', error.message);
+      console.log("error creating the user", error);
     }
   }
 
-  return await getDoc(userDocRef);
-}
+  return (await getDoc(userDocRef)) as QueryDocumentSnapshot<UserData>;
+};
 
-export const createAuthUserWithEmailAndPassword = async (email, password) => {
+export const createAuthUserWithEmailAndPassword = async (
+  email: string,
+  password: string
+) => {
   if (!email || !password) return;
   return await createUserWithEmailAndPassword(auth, email, password);
-}
+};
 
-export const signInAuthUserWithEmailAndPassword = async (email, password) => {
+export const signInAuthUserWithEmailAndPassword = async (
+  email: string,
+  password: string
+) => {
   if (!email || !password) return;
   return await signInWithEmailAndPassword(auth, email, password);
-}
+};
 
 export const signOutUser = async () => await signOut(auth);
 
-export const onAuthStateChangedListener = (callback) =>
+export const onAuthStateChangedListener = (callback: NextOrObserver<User>) =>
   onAuthStateChanged(auth, callback);
 
-export const getCurrentUser = () => {
+export const getCurrentUser = (): Promise<User | null> => {
   return new Promise((resolve, reject) => {
     const unsubscribe = onAuthStateChanged(
-      auth, (userAuth) => {
+      auth,
+      (userAuth) => {
         unsubscribe();
         resolve(userAuth);
       },
       reject
-    )
-  })
-}
+    );
+  });
+};

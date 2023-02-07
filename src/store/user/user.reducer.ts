@@ -5,25 +5,25 @@ import {
   signInSuccess,
   signOutFailed,
   signOutSuccess,
-  signUpFailed
+  signUpFailed,
 } from "./user.action";
-import { User } from "./user.types";
+import { CurrentUser } from "./user.types";
 
-type UserState = {
-  currentUser: User | null;
-  isLoading: boolean;
-  error: Error | null;
-}
+export type UserState = {
+  readonly currentUser: CurrentUser | null;
+  readonly isLoading: boolean;
+  readonly error: Error | null;
+};
 
 const USER_INITIAL_STATE: UserState = {
   currentUser: null,
   isLoading: false,
   error: null,
-}
+};
 
 export const userReducer = (
   state = USER_INITIAL_STATE,
-  action = {} as AnyAction
+  action: AnyAction
 ): UserState => {
   if (signInSuccess.match(action)) {
     return { ...state, currentUser: action.payload };
@@ -40,4 +40,4 @@ export const userReducer = (
   }
 
   return state;
-}
+};
