@@ -12,24 +12,24 @@ import { AdditionalInformation } from "../../utils/firebase/firebase.utils";
 type CheckUserSession = Action<USER_ACTION_TYPES.CHECK_USER_SESSION>;
 type GoogleSignInStart = Action<USER_ACTION_TYPES.GOOGLE_SIGN_IN_START>;
 
-type EmailSignInStart = ActionWithPayload<
+export type EmailSignInStart = ActionWithPayload<
   USER_ACTION_TYPES.SIGN_IN_START,
   { email: string; password: string }
 >;
 
-type SignInSuccess = ActionWithPayload<
+export type SignInSuccess = ActionWithPayload<
   USER_ACTION_TYPES.SIGN_IN_SUCCESS,
   CurrentUser
 >;
 
 type SignInFailed = ActionWithPayload<USER_ACTION_TYPES.SING_IN_FAILED, Error>;
 
-type SignUpStart = ActionWithPayload<
+export type SignUpStart = ActionWithPayload<
   USER_ACTION_TYPES.SIGN_UP_START,
-  { email: String; password: String; displayName: String }
+  { email: string; password: string; displayName: string }
 >;
 
-type SignUpSuccess = ActionWithPayload<
+export type SignUpSuccess = ActionWithPayload<
   USER_ACTION_TYPES.SIGN_UP_SUCCESS,
   { userAuth: User; additionalDetails: AdditionalInformation }
 >;
@@ -68,9 +68,9 @@ export const signInFailed = withMatcher(
 );
 
 export const signUpStart = (
-  email: String,
-  password: String,
-  displayName: String
+  email: string,
+  password: string,
+  displayName: string
 ): SignUpStart =>
   createAction(USER_ACTION_TYPES.SIGN_UP_START, {
     email,
@@ -82,7 +82,10 @@ export const signUpSuccess = (
   userAuth: User,
   additionalDetails: AdditionalInformation
 ): SignUpSuccess =>
-  createAction(USER_ACTION_TYPES.SIGN_UP_SUCCESS, { userAuth, additionalDetails });
+  createAction(USER_ACTION_TYPES.SIGN_UP_SUCCESS, {
+    userAuth,
+    additionalDetails,
+  });
 
 export const signUpFailed = withMatcher(
   (error: Error): SignUpFailed =>

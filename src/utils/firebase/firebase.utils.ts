@@ -25,6 +25,7 @@ import {
 import { Category } from "../../store/categories/category.types";
 import { CurrentUser } from "../../store/user/user.types";
 import { WishlistItem } from "../../store/wishlist/wishlist.types";
+import { WishlistState } from "../../store/wishlist/wishlist.reducer";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAOFL7Jm3kz571UfFhQ6HcPDsQHxdInomY",
@@ -80,7 +81,7 @@ export const getCategoriesAndDocuments = async (): Promise<Category[]> => {
 export const updateWishlistDocumentFromLocalState = async (
   user: CurrentUser,
   wishlist: WishlistItem[]
-) => {
+): Promise<void | QueryDocumentSnapshot<WishlistState>> => {
   if (!user) return;
 
   const wishlistDocRef = doc(db, "wishlists", user.id);
@@ -94,13 +95,13 @@ export const updateWishlistDocumentFromLocalState = async (
     console.log("error updating the user wishlist", error);
   }
 
-  return await getDoc(wishlistDocRef); // instead of wishlistSnapshot to prevent data clash
+  return (await getDoc(wishlistDocRef)) as QueryDocumentSnapshot<WishlistState>; // instead of wishlistSnapshot to prevent data clash
 };
 
 export const createWishlistDocumentFromAuth = async (
   user: CurrentUser,
   wishlist: WishlistItem[]
-) => {
+): Promise<void | QueryDocumentSnapshot<WishlistState>> => {
   if (!user) return;
 
   const wishlistDocRef = doc(db, "wishlists", user.id);
@@ -116,7 +117,7 @@ export const createWishlistDocumentFromAuth = async (
     }
   }
 
-  return await getDoc(wishlistDocRef); // instead of wishlistSnapshot to prevent data clash
+  return (await getDoc(wishlistDocRef)) as QueryDocumentSnapshot<WishlistState>; // instead of wishlistSnapshot to prevent data clash
 };
 
 export type AdditionalInformation = {
@@ -132,7 +133,7 @@ export type UserData = {
 export const createUserDocumentFromAuth = async (
   userAuth: User,
   additionalInformation = {} as AdditionalInformation
-): Promise<void | QueryDocumentSnapshot> => {
+): Promise<void | QueryDocumentSnapshot<UserData>> => {
   if (!userAuth) return;
 
   const userDocRef = doc(db, "users", userAuth.uid);

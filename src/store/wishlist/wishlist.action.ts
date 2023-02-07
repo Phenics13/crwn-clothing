@@ -47,12 +47,12 @@ const addWishlistItemsFromFirebase = (
   ];
 };
 
-type SetWishlist = ActionWithPayload<
+export type SetWishlist = ActionWithPayload<
   WISHLIST_ACTION_TYPES.SET_WISHLIST,
   WishlistItem[]
 >;
 
-type FetchWishlistStart = Action<WISHLIST_ACTION_TYPES.FETCH_WISHLIST_START>;
+export type FetchWishlistStart = Action<WISHLIST_ACTION_TYPES.FETCH_WISHLIST_START>;
 
 type FetchWishlistSuccess =
   Action<WISHLIST_ACTION_TYPES.FETCH_WISHLIST_SUCCESS>;

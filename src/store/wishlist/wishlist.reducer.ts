@@ -6,7 +6,7 @@ import {
   setWishlist,
   updateWishlistFailed,
 } from "./wishlist.action";
-import { WishlistItem, WISHLIST_ACTION_TYPES } from "./wishlist.types";
+import { WishlistItem } from "./wishlist.types";
 
 export type WishlistState = {
   readonly wishlist: WishlistItem[];

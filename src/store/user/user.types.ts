@@ -1,3 +1,5 @@
+import { UserData } from "../../utils/firebase/firebase.utils";
+
 export enum USER_ACTION_TYPES {
   CHECK_USER_SESSION = "user/CHECK_USER_SESSION",
   GOOGLE_SIGN_IN_START = "user/GOOGLE_SIGN_IN_START",
@@ -11,7 +13,5 @@ export enum USER_ACTION_TYPES {
   SIGN_OUT_SUCCESS = "user/SIGN_OUT_SUCCESS",
   SIGN_OUT_FAILED = "user/SIGN_OUT_FAILED",
 }
-
-import { UserData } from "../../utils/firebase/firebase.utils";
 
 export type CurrentUser = UserData & { id: string };
